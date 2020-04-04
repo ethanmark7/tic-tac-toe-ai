@@ -26,6 +26,9 @@ def getHumanMove():
 
     return positions.get(move)
     
+# Update the game board    
+def updateBoard(player, position):
+    board[position[1]][position[0]] = player
 
 # Game Board
 board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -36,4 +39,5 @@ ai = -1
 
 
 clear()
-print(getHumanMove())
+updateBoard(human, [1, 2])
+print(board)
