@@ -42,7 +42,7 @@ def getHumanMove():
     return positions.get(move)
     
 # Update the game board    
-def updateBoard(player, position):
+def updateBoard(player, position): 
     board[position[1]][position[0]] = player
 
 # Display the board
@@ -51,9 +51,9 @@ def displayBoard():
 
     for i in range(3):
         for j in range(3):
-            if b[i][j] == 1:
+            if b[i][j] == ai:
                 b[i][j] = 'x'
-            elif b[i][j] == -1:
+            elif b[i][j] == human:
                 b[i][j] = 'o'
             else:
                 b[i][j] = ' '
@@ -65,6 +65,17 @@ def displayBoard():
     print("-------------")
     print("| " + b[2][0] + " | " + b[2][1] + " | " + b[2][2] + " | ")
     print("-------------")
+
+# Return empty cells
+def emptyCells():
+    emptyCells = 0
+
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == 0:
+                emptyCells += 1
+
+    return emptyCells
 
 def checkForWinner():
     winningCombinations = [
