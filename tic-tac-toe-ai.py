@@ -1,21 +1,30 @@
 import os
 import copy
 import time
-clear = lambda: os.system('cls') # Clears the console.
+from math import inf as infinity
+
+# Clear console func
+clear = lambda: os.system('cls') 
+
+# Game Board
+board = [
+    [0, 0, 0], 
+    [0, 0, 0], 
+    [0, 0, 0]
+]
+
+# Players
+human = 1
+ai = -1
+
 
 # Ask the user for a postion and return its board coordinates
 def getHumanMove():
     move = -1
     positions = {
-        1: [0, 0],
-        2: [1, 0],
-        3: [2, 0],
-        4: [0, 1],
-        5: [1, 1],
-        6: [2, 1],
-        7: [0, 2],
-        8: [1, 2],
-        9: [2, 2]
+        1: [0, 0], 2: [1, 0], 3: [2, 0],
+        4: [0, 1], 5: [1, 1], 6: [2, 1],
+        7: [0, 2], 8: [1, 2], 9: [2, 2]
     }
 
     while move == -1 or move > 9 or move < 1:
