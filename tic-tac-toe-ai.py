@@ -1,5 +1,6 @@
 import os
 import copy
+import time
 clear = lambda: os.system('cls') # Clears the console.
 
 # Ask the user for a postion and return its board coordinates
@@ -78,6 +79,13 @@ def checkForWinner():
                 if board[j][i] == 0:
                     return 2 # There are more spaces to fill 
 
+def humanTurn():
+    updateBoard(human, getHumanMove())
+    displayBoard()
+
+def aiTurn():
+    print('Here comes the hard stuff! RI_P')
+
 # Game Board
 board = [
     [0, 0, 0], 
@@ -94,5 +102,12 @@ clear()
 
 # Continue the game until there is a winner
 while checkForWinner() == 2:
-    updateBoard(human, getHumanMove())
-    displayBoard()
+    humanTurn()
+
+    # Loading animation
+    for x in range(4):  
+        b = "Loading" + "." * x
+        print (b, end="\r")
+        time.sleep(0.5)
+
+    aiTurn()
