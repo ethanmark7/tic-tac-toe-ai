@@ -78,45 +78,88 @@ def checkForWinner():
         [board[2][0], board[1][1], board[0][2]],
     ]
 
-    if [1, 1, 1] in winningCombinations:
-        return 1 # Human won
-    elif [-1, -1, -1] in winningCombinations:
-        return -1 # AI won
+    if [ai, ai, ai] in winningCombinations:
+        return -1 # Human won
+    elif [human, human, human] in winningCombinations:
+        return 1 # AI won
     else:
-        for i in range(3):
-            for j in range(3):
-                if board[j][i] == 0:
-                    return 2 # There are more spaces to fill 
+        if emptyCells() == 0:
+            return 0
+        else:
+            return 2
 
 def humanTurn():
     updateBoard(human, getHumanMove())
+    #clear()
     displayBoard()
 
+def minimax(depth, player): 
+    #print("mineeing", depth)
+    if player == ai:
+        maxVal = [-1, -1, -infinity]
+    else:
+        maxVal = [-1, -1, infinity]
+
+    if depth == 0 or checkForWinner() != 2:
+        #print("eval:", checkForWinner())
+        return[-1, -1, checkForWinner()]
+
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == 0:
+                #print(i, j)
+                board[i][j] = player
+                #print('added')
+                #displayBoard()
+                score = minimax(depth - 1, -player)
+                #print('mineed')
+                board[i][j] = 0
+                #print('reverted')
+                if player == ai:
+                    score = [i, j, checkForWinner()]
+                else:
+                    score = [i, j, checkForWinner() * -1]
+
+    if player == ai:
+        if score[2] > maxVal[2]:
+            maxVal = score
+    else:
+        if score[2] < maxVal[2]:
+            maxVal = score
+
+    return maxVal
+
 def aiTurn():
-    print('Here comes the hard stuff! RI_P')
+    pos = minimax(emptyCells(), ai)
+    updateBoard(ai, [pos[1], pos[0]])
+    #clear()
+    displayBoard()
 
-# Game Board
-board = [
-    [0, 0, 0], 
-    [0, 0, 0], 
-    [0, 0, 0]
-]
+# Manages the board
+def main():
+    clear() # Clear the console
 
-# Players
-human = 1
-ai = -1
+    print("Welcome Human!")
+    displayBoard()
 
-# Start Game
-clear()
+    while checkForWinner() == 2:
+        humanTurn()
 
-# Continue the game until there is a winner
-while checkForWinner() == 2:
-    humanTurn()
+        # Loading animation
+        #for x in range(4):  
+        #    b = "Thinking" + "." * x
+        #    print (b, end="\r")
+        #    time.sleep(0.25)
 
-    # Loading animation
-    for x in range(4):  
-        b = "Loading" + "." * x
-        print (b, end="\r")
-        time.sleep(0.5)
+        aiTurn()
 
-    aiTurn()
+    clear()
+
+    if checkForWinner() == ai:
+        print("Honestly dude, you had no chance! RIP")
+    elif checkForWinner() == human:
+        print("You will never see this secret message.")
+    else:
+        print("Good try, maybe next time you'll win. ;)")
+
+main()
