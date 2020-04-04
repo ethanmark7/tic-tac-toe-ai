@@ -52,9 +52,9 @@ def displayBoard():
     for i in range(3):
         for j in range(3):
             if b[i][j] == ai:
-                b[i][j] = 'x'
-            elif b[i][j] == human:
                 b[i][j] = 'o'
+            elif b[i][j] == human:
+                b[i][j] = 'x'
             else:
                 b[i][j] = ' '
 
@@ -90,9 +90,9 @@ def checkForWinner():
     ]
 
     if [ai, ai, ai] in winningCombinations:
-        return -1 # Human won
+        return 1 # Human won
     elif [human, human, human] in winningCombinations:
-        return 1 # AI won
+        return -1 # AI won
     else:
         if emptyCells() == 0:
             return 0
@@ -101,49 +101,41 @@ def checkForWinner():
 
 def humanTurn():
     updateBoard(human, getHumanMove())
-    #clear()
     displayBoard()
 
+paths = []
+
 def minimax(depth, player): 
-    #print("mineeing", depth)
     if player == ai:
         maxVal = [-1, -1, -infinity]
     else:
-        maxVal = [-1, -1, infinity]
+        maxVal = [-1, -1, +infinity]
 
     if depth == 0 or checkForWinner() != 2:
-        #print("eval:", checkForWinner())
         return[-1, -1, checkForWinner()]
 
     for i in range(3):
         for j in range(3):
             if board[i][j] == 0:
-                #print(i, j)
-                board[i][j] = player
-                #print('added')
-                #displayBoard()
+                board[i][j] = player  
                 score = minimax(depth - 1, -player)
-                #print('mineed')
                 board[i][j] = 0
-                #print('reverted')
+                
                 if player == ai:
-                    score = [i, j, checkForWinner()]
+                    if score[2] > maxVal[2]:
+                        maxVal = score
+                        maxVal[0], maxVal[1] = i, j
                 else:
-                    score = [i, j, checkForWinner() * -1]
-
-    if player == ai:
-        if score[2] > maxVal[2]:
-            maxVal = score
-    else:
-        if score[2] < maxVal[2]:
-            maxVal = score
+                    if score[2] < maxVal[2]:
+                        maxVal = score
+                        maxVal[0], maxVal[1] = i, j
 
     return maxVal
 
 def aiTurn():
     pos = minimax(emptyCells(), ai)
     updateBoard(ai, [pos[1], pos[0]])
-    #clear()
+    clear()
     displayBoard()
 
 # Manages the board
@@ -154,21 +146,20 @@ def main():
     displayBoard()
 
     while checkForWinner() == 2:
+        
         humanTurn()
 
         # Loading animation
-        #for x in range(4):  
-        #    b = "Thinking" + "." * x
-        #    print (b, end="\r")
-        #    time.sleep(0.25)
+        for x in range(4):  
+            b = "Thinking" + "." * x
+            print (b, end="\r")
+            time.sleep(0.25)
 
         aiTurn()
 
-    clear()
-
-    if checkForWinner() == ai:
+    if checkForWinner() == human:
         print("Honestly dude, you had no chance! RIP")
-    elif checkForWinner() == human:
+    elif checkForWinner() == ai:
         print("You will never see this secret message.")
     else:
         print("Good try, maybe next time you'll win. ;)")
