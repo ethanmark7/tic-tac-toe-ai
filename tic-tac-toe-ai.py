@@ -1,17 +1,10 @@
 import os
+import copy
 clear = lambda: os.system('cls') # Clears the console.
 
 # Ask the user for a postion and return its board coordinates
 def getHumanMove():
     move = -1
-    while move == -1:
-        move = input("Human's Turn: ")
-        try:
-            move = int(move)
-        except ValueError:
-            print("Please enter a number between 1 and 9")
-            move = -1
-    
     positions = {
         1: [0, 0],
         2: [1, 0],
@@ -24,6 +17,17 @@ def getHumanMove():
         9: [2, 2]
     }
 
+    while move == -1:
+        move = input("Human's Turn: ")
+        try:
+            move = int(move)
+            if board[positions.get(move)[1]][positions.get(move)[0]] != 0:
+                print("Someone else occupies that space...")
+                move = -1
+        except ValueError:
+            print("Please enter a number between 1 and 9")
+            move = -1
+
     return positions.get(move)
     
 # Update the game board    
@@ -32,7 +36,8 @@ def updateBoard(player, position):
 
 # Display the board
 def displayBoard():
-    b = board
+    b = copy.deepcopy(board)
+
     for i in range(3):
         for j in range(3):
             if b[i][j] == 1:
@@ -63,15 +68,20 @@ def checkForWinner():
     ]
 
     if [1, 1, 1] in winningCombinations:
+        print('H')
         return 1 # Human won
     elif [-1, -1, -1] in winningCombinations:
+        print('A')
         return -1 # AI won
     else:
+        print('testing spaces')
         for i in range(3):
             for j in range(3):
-                if board[i][j] == 0:
+                print(board[j][i])
+                if board[j][i] == 0:
+                    print(i, j)
+                    print('M')
                     return 2 # There are more spaces to fill 
-        return 0 # Tie
 
 # Game Board
 board = [
@@ -86,3 +96,11 @@ ai = -1
 
 # Start Game
 clear()
+
+# Continue the game until there is a winner
+while checkForWinner() == 2:
+    print(checkForWinner())
+    updateBoard(human, getHumanMove())
+    print(board)
+    displayBoard()
+    print(checkForWinner())
