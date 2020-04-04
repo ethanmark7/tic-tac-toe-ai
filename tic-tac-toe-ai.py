@@ -50,13 +50,39 @@ def displayBoard():
     print("| " + b[2][0] + " | " + b[2][1] + " | " + b[2][2] + " | ")
     print("-------------")
 
+def checkForWinner():
+    winningCombinations = [
+        [board[0][0], board[0][1], board[0][2]], # Horizontals
+        [board[1][0], board[1][1], board[1][2]],
+        [board[2][0], board[2][1], board[2][2]],
+        [board[0][0], board[1][0], board[2][0]], # Verticals
+        [board[0][1], board[1][1], board[2][1]],
+        [board[0][2], board[1][2], board[2][2]],
+        [board[0][0], board[1][1], board[2][2]], # Diagonals
+        [board[2][0], board[1][1], board[0][2]],
+    ]
+
+    if [1, 1, 1] in winningCombinations:
+        return 1 # Human won
+    elif [-1, -1, -1] in winningCombinations:
+        return -1 # AI won
+    else:
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == 0:
+                    return 2 # There are more spaces to fill 
+        return 0 # Tie
+
 # Game Board
-board = [[0, 0, -1], [0, 0, 1], [0, 1, 0]]
+board = [
+    [0, 0, 0], 
+    [0, 0, 0], 
+    [0, 0, 0]
+]
 
 # Players
 human = 1
 ai = -1
 
-
+# Start Game
 clear()
-displayBoard()
