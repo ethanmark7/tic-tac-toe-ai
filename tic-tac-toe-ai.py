@@ -30,8 +30,28 @@ def getHumanMove():
 def updateBoard(player, position):
     board[position[1]][position[0]] = player
 
+# Display the board
+def displayBoard():
+    b = board
+    for i in range(3):
+        for j in range(3):
+            if b[i][j] == 1:
+                b[i][j] = 'x'
+            elif b[i][j] == -1:
+                b[i][j] = 'o'
+            else:
+                b[i][j] = ' '
+
+    print("-------------")
+    print("| " + b[0][0] + " | " + b[0][1] + " | " + b[0][2] + " | ")
+    print("-------------")
+    print("| " + b[1][0] + " | " + b[1][1] + " | " + b[1][2] + " | ")
+    print("-------------")
+    print("| " + b[2][0] + " | " + b[2][1] + " | " + b[2][2] + " | ")
+    print("-------------")
+
 # Game Board
-board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+board = [[0, 0, -1], [0, 0, 1], [0, 1, 0]]
 
 # Players
 human = 1
@@ -39,5 +59,4 @@ ai = -1
 
 
 clear()
-updateBoard(human, [1, 2])
-print(board)
+displayBoard()
